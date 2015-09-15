@@ -15,4 +15,14 @@
       Panel used for testing wheels, LEDs, and connection with the MTracker robot.
     </description>
   </class>
+
+  <class name="Pose2D"
+         type="mtracker_gui::PoseDisplay"
+         base_class_type="rviz::Display">
+    <description>
+      Displays position and orientation of the robot in the 2D space.
+    </description>
+    <message_type>geometry_msgs/Pose2D</message_type>
+  </class>
+
 </library>
