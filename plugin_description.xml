@@ -1,0 +1,18 @@
+<library path="lib/libmtracker_gui">
+  
+  <class name="Control Panel"
+         type="mtracker_gui::ControlsPanel"
+         base_class_type="rviz::Panel">
+    <description>
+      Panel used for choosing a controller type and setting its parameters.
+    </description>
+  </class>
+
+  <class name="Debug Panel"
+         type="mtracker_gui::DebugPanel"
+         base_class_type="rviz::Panel">
+    <description>
+      Panel used for testing wheels, LEDs, and connection with the MTracker robot.
+    </description>
+  </class>
+</library>
