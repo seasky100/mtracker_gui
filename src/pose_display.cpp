@@ -1,22 +1,15 @@
-#include <OGRE/OgreSceneNode.h>
-#include <OGRE/OgreSceneManager.h>
-
-#include <tf/transform_listener.h>
-
-#include <rviz/visualization_manager.h>
-#include <rviz/properties/color_property.h>
-#include <rviz/properties/float_property.h>
-#include <rviz/properties/int_property.h>
-#include <rviz/frame_manager.h>
-
 #include "pose_display.h"
-#include "pose_visual.h"
 
 namespace mtracker_gui
 {
 
-PoseDisplay::PoseDisplay()
+PoseDisplay::PoseDisplay() : Display()
 {
+  topic_property_ = new rviz::RosTopicProperty( "Topic", "",
+                                          QString::fromStdString( ros::message_traits::datatype<geometry_msgs::Pose2D>() ),
+                                          "geometry_msgs::Pose2D topic to subscribe to.",
+                                          this, SLOT( updateTopic() ));
+
   color_property_ = new rviz::ColorProperty( "Color", QColor( 204, 51, 204 ),
                                              "Color to draw the pose arrows.",
                                              this, SLOT( updateColorAndAlpha() ));
@@ -32,20 +25,23 @@ PoseDisplay::PoseDisplay()
   history_length_property_->setMax( 100000 );
 }
 
-void PoseDisplay::onInitialize()
-{
-  MFDClass::onInitialize();
-  updateHistoryLength();
-}
-
 PoseDisplay::~PoseDisplay()
 {
 }
 
+void PoseDisplay::onInitialize()
+{
+  updateHistoryLength();
+}
+
 void PoseDisplay::reset()
 {
-  MFDClass::reset();
   visuals_.clear();
+}
+
+void PoseDisplay::updateTopic()
+{
+  // ???
 }
 
 void PoseDisplay::updateColorAndAlpha()
@@ -64,19 +60,8 @@ void PoseDisplay::updateHistoryLength()
   visuals_.rset_capacity(history_length_property_->getInt());
 }
 
-void PoseDisplay::processMessage(const geometry_msgs::PoseStamped::ConstPtr& msg)
+void PoseDisplay::processMessage(const geometry_msgs::Pose2D::ConstPtr& msg)
 {
-  Ogre::Quaternion orientation;
-  Ogre::Vector3 position;
-  if( !context_->getFrameManager()->getTransform( msg->header.frame_id,
-                                                  msg->header.stamp,
-                                                  position, orientation ))
-  {
-    ROS_DEBUG( "Error transforming from frame '%s' to frame '%s'",
-               msg->header.frame_id.c_str(), qPrintable( fixed_frame_ ));
-    return;
-  }
-
   boost::shared_ptr<PoseVisual> visual;
   if (visuals_.full())
   {
@@ -88,8 +73,6 @@ void PoseDisplay::processMessage(const geometry_msgs::PoseStamped::ConstPtr& msg
   }
 
   visual->setMessage(msg);
-//  visual->setFramePosition(position);
-//  visual->setFrameOrientation(orientation);
 
   float alpha = alpha_property_->getFloat();
   Ogre::ColourValue color = color_property_->getOgreColor();
