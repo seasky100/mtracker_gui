@@ -14,18 +14,19 @@ catkin_package(
 qt4_wrap_cpp(MOC_FILES
   include/controls_panel.h
   include/debug_panel.h
-  include/pose_display.h
-  include/pose_visual.h)
+#  include/pose_display.h
+#  include/pose_visual.h
+)
 
 set(SOURCE_FILES
   src/controls_panel.cpp
   src/debug_panel.cpp
-  src/pose_display.cpp
-  src/pose_visual.cpp
+#  src/pose_display.cpp
+#  src/pose_visual.cpp
   include/controls_panel.h
   include/debug_panel.h
-  include/pose_display.h
-  include/pose_visual.h
+#  include/pose_display.h
+#  include/pose_visual.h
   ${MOC_FILES}
 )
 
