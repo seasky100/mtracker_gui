@@ -1,8 +1,10 @@
 #ifndef CONTROLS_PANEL_H
 #define CONTROLS_PANEL_H
 
-#include "ros/ros.h"
-#include "rviz/panel.h"
+#include <ros/ros.h>
+#include <rviz/panel.h>
+#include <std_srvs/Empty.h>
+#include <geometry_msgs/Twist.h>
 
 #include <QCheckBox>
 #include <QLineEdit>
@@ -12,6 +14,8 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QTimer>
+
+#include <stdio.h>
 
 class QLineEdit;
 class QPushButton;
@@ -31,6 +35,7 @@ public:
 public Q_SLOTS:
 
 private Q_SLOTS:
+  void callService();
 
 private:
   void keyPressEvent(QKeyEvent * e);
@@ -49,6 +54,7 @@ private:
   QLineEdit* angular_velocity_input_;
 
   ros::NodeHandle nh_;
+  ros::ServiceClient mancontroller_trigger_cli_;
   ros::Publisher velocity_publisher_;
 
   float linear_velocity_;

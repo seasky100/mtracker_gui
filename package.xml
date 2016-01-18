@@ -1,16 +1,23 @@
 <?xml version="1.0"?>
-<package>
-  <description>
-    RViz panel for MTracker.
-  </description>
-
+<package format="2">
+  <description> RViz panel for MTracker. </description>
   <name>mtracker_gui</name>
-  <version>0.0.0</version>
+  <version>1.0.0</version>
   <maintainer email="inz.mateusz.przybyla@gmail.com">Mateusz Przybyla</maintainer>
-  <author email="inz.mateusz.przybyla@gmail.com">Mateusz Przybyla</author>
+  <author>Mateusz Przybyla</author>
   <license>BSD</license>
 
   <buildtool_depend>catkin</buildtool_depend>
+  <depend>roscpp</depend>
+  <depend>rviz</depend>
+  <depend>geometry_msgs</depend>
+  <depend>std_srvs</depend>
+  <depend>tf</depend>
+  <depend>joy</depend>
+
+
+<!--  <buildtool_depend>catkin</buildtool_depend>
+
   <build_depend>rospy</build_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>rviz</build_depend>
@@ -21,7 +28,7 @@
   <run_depend>roscpp</run_depend>
   <run_depend>rviz</run_depend>
   <run_depend>geometry_msgs</run_depend>
-  <run_depend>message_runtime</run_depend>
+  <run_depend>message_runtime</run_depend>-->
 
   <export>
     <rviz plugin="${prefix}/plugin_description.xml"/>

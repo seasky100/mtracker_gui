@@ -1,6 +1,3 @@
-#include <stdio.h>
-
-#include "geometry_msgs/Twist.h"
 #include "controls_panel.h"
 
 namespace mtracker_gui
@@ -8,11 +5,14 @@ namespace mtracker_gui
 
 ControlsPanel::ControlsPanel(QWidget* parent)
   : rviz::Panel(parent),
+    nh_(""),
     linear_velocity_(0.0f),
     angular_velocity_(0.0f),
     keys_active(false),
     joy_active(true)
 {
+  mancontroller_trigger_cli_ = nh_.serviceClient<std_srvs::Empty>("mancontroller_trigger");
+
   controls_checkbox_ = new QCheckBox("Controls active");
 
   joy_button_   = new QPushButton("Joy");
@@ -75,11 +75,17 @@ ControlsPanel::ControlsPanel(QWidget* parent)
   //QTimer* output_timer = new QTimer( this );
 
   // Next we make signal/slot connections.
-  //connect( drive_widget_, SIGNAL( outputVelocity( float, float )), this, SLOT( setVel( float, float )));
+  connect(down_button_, SIGNAL(clicked()), this, SLOT(callService()));
   //connect( output_topic_editor_, SIGNAL( editingFinished() ), this, SLOT( updateTopic() ));
   //connect( output_timer, SIGNAL( timeout() ), this, SLOT( sendVel() ));
 
   //output_timer->start( 100 );
+}
+
+void ControlsPanel::callService()
+{
+  std_srvs::Empty e;
+  mancontroller_trigger_cli_.call(e);
 }
 
 void ControlsPanel::keyPressEvent(QKeyEvent * e)
