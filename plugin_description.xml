@@ -16,13 +16,13 @@
     </description>
   </class>
 
-  <class name="Pose2D"
-         type="mtracker_gui::PoseDisplay"
+  <class name="Path Display"
+         type="mtracker_gui::PathDisplay"
          base_class_type="rviz::Display">
     <description>
-      Displays position and orientation of the robot in the 2D space.
+      Displays path from PointStamped messages.
     </description>
-    <message_type>geometry_msgs/Pose2D</message_type>
+    <message_type>geometry_msgs/PointStamped</message_type>
   </class>
 
 </library>

@@ -1,11 +1,19 @@
 #ifndef POSE_VISUAL_H
 #define POSE_VISUAL_H
 
-#include <OGRE/OgreVector3.h>
-#include <OGRE/OgreSceneNode.h>
-#include <OGRE/OgreSceneManager.h>
-#include <rviz/ogre_helpers/shape.h>
-#include <geometry_msgs/Pose2D.h>
+#include <geometry_msgs/Vector3.h>
+#include <geometry_msgs/PointStamped.h>
+
+namespace Ogre
+{
+class Vector3;
+class Quaternion;
+}
+
+namespace rviz
+{
+class Shape;
+}
 
 namespace mtracker_gui
 {
@@ -13,17 +21,24 @@ namespace mtracker_gui
 class PoseVisual
 {
 public:
-  PoseVisual(Ogre::SceneManager* scene_manager, Ogre::SceneNode* parent_node);
+  PoseVisual( Ogre::SceneManager* scene_manager, Ogre::SceneNode* parent_node );
   virtual ~PoseVisual();
 
-  void setMessage(const geometry_msgs::Pose2D::ConstPtr& msg);
-  void setColor(float r, float g, float b, float a);
+  void setMessage( const geometry_msgs::PointStamped::ConstPtr& msg );
+
+  void setFramePosition( const Ogre::Vector3& position );
+  void setFrameOrientation( const Ogre::Quaternion& orientation );
+
+  void setColor( float r, float g, float b, float a );
 
 private:
-  boost::shared_ptr<rviz::Shape> path_dot_;
+  boost::shared_ptr<rviz::Shape> dot_;
+
   Ogre::SceneNode* frame_node_;
+
   Ogre::SceneManager* scene_manager_;
 };
+
 
 } // end namespace mtracker_gui
 
