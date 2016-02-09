@@ -15,90 +15,74 @@
 namespace mtracker_gui
 {
 
-PathDisplay::PathDisplay()
-{
+PathDisplay::PathDisplay() {
   color_property_ = new rviz::ColorProperty( "Color", QColor( 204, 51, 204 ),
                                              "Color to draw the acceleration arrows.",
-                                             this, SLOT( updateColorAndAlpha() ));
-
-  alpha_property_ = new rviz::FloatProperty( "Alpha", 1.0,
-                                             "0 is fully transparent, 1.0 is fully opaque.",
-                                             this, SLOT( updateColorAndAlpha() ));
+                                             this, SLOT(updateColor()));
 
   history_length_property_ = new rviz::IntProperty( "History Length", 1,
                                                     "Number of prior measurements to display.",
-                                                    this, SLOT( updateHistoryLength() ));
-  history_length_property_->setMin( 1 );
-  history_length_property_->setMax( 100000 );
+                                                    this, SLOT(updateHistoryLength()));
+  history_length_property_->setMin(1);
+  history_length_property_->setMax(10000);
 }
 
-void PathDisplay::onInitialize()
-{
+void PathDisplay::onInitialize() {
   MFDClass::onInitialize();
   updateHistoryLength();
 }
 
-PathDisplay::~PathDisplay()
-{
-}
+PathDisplay::~PathDisplay() {}
 
-void PathDisplay::reset()
-{
+void PathDisplay::reset() {
   MFDClass::reset();
   visuals_.clear();
 }
 
-void PathDisplay::updateColorAndAlpha()
-{
-  float alpha = alpha_property_->getFloat();
+void PathDisplay::updateColor() {
   Ogre::ColourValue color = color_property_->getOgreColor();
 
-  for( size_t i = 0; i < visuals_.size(); i++ )
-  {
-    visuals_[ i ]->setColor( color.r, color.g, color.b, alpha );
+  for (size_t i = 0; i < visuals_.size(); i++) {
+    visuals_[i]->setColor(color.r, color.g, color.b, 1.0);
   }
 }
 
-void PathDisplay::updateHistoryLength()
-{
+void PathDisplay::updateHistoryLength() {
   visuals_.rset_capacity(history_length_property_->getInt());
 }
 
-void PathDisplay::processMessage( const geometry_msgs::PointStamped::ConstPtr& msg )
-{
+void PathDisplay::processMessage(const geometry_msgs::PoseStamped::ConstPtr& msg) {
   Ogre::Quaternion orientation;
   Ogre::Vector3 position;
-  if( !context_->getFrameManager()->getTransform( msg->header.frame_id,
+
+  if (!context_->getFrameManager()->getTransform( msg->header.frame_id,
                                                   msg->header.stamp,
-                                                  position, orientation ))
+                                                  position, orientation))
   {
     ROS_DEBUG( "Error transforming from frame '%s' to frame '%s'",
-               msg->header.frame_id.c_str(), qPrintable( fixed_frame_ ));
+               msg->header.frame_id.c_str(), qPrintable(fixed_frame_));
     return;
   }
 
   boost::shared_ptr<PoseVisual> visual;
-  if( visuals_.full() )
-  {
+  if (visuals_.full()) {
     visual = visuals_.front();
   }
-  else
-  {
-    visual.reset(new PoseVisual( context_->getSceneManager(), scene_node_ ));
+  else {
+    visual.reset(new PoseVisual(context_->getSceneManager(), scene_node_));
   }
 
-  visual->setMessage( msg );
-  visual->setFramePosition( position );
-  visual->setFrameOrientation( orientation );
+  visual->setMessage(msg);
+  visual->setFramePosition(position);
+  visual->setFrameOrientation(orientation);
 
-  float alpha = alpha_property_->getFloat();
   Ogre::ColourValue color = color_property_->getOgreColor();
-  visual->setColor( color.r, color.g, color.b, alpha );
+  visual->setColor(color.r, color.g, color.b, 1.0);
 
   visuals_.push_back(visual);
 
   for (uint i = 0; i < visuals_.size(); ++i) {
-    visuals_[i]->setColor( color.r, color.g, color.b, (float)i /visuals_.size() );
+    visuals_[i]->setColor(color.r, color.g, color.b, (float)i / visuals_.size());
   }
 }
 

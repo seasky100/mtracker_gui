@@ -2,7 +2,7 @@
 #define POSE_VISUAL_H
 
 #include <geometry_msgs/Vector3.h>
-#include <geometry_msgs/PointStamped.h>
+#include <geometry_msgs/PoseStamped.h>
 
 namespace Ogre
 {
@@ -21,21 +21,20 @@ namespace mtracker_gui
 class PoseVisual
 {
 public:
-  PoseVisual( Ogre::SceneManager* scene_manager, Ogre::SceneNode* parent_node );
+  PoseVisual(Ogre::SceneManager* scene_manager, Ogre::SceneNode* parent_node );
   virtual ~PoseVisual();
 
-  void setMessage( const geometry_msgs::PointStamped::ConstPtr& msg );
+  void setMessage(const geometry_msgs::PoseStamped::ConstPtr& msg);
 
-  void setFramePosition( const Ogre::Vector3& position );
-  void setFrameOrientation( const Ogre::Quaternion& orientation );
+  void setFramePosition(const Ogre::Vector3& position);
+  void setFrameOrientation(const Ogre::Quaternion& orientation);
 
-  void setColor( float r, float g, float b, float a );
+  void setColor(float r, float g, float b, float a);
 
 private:
   boost::shared_ptr<rviz::Shape> dot_;
 
   Ogre::SceneNode* frame_node_;
-
   Ogre::SceneManager* scene_manager_;
 };
 

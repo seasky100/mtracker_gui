@@ -2,7 +2,7 @@
 #define PATH_DISPLAY_H
 
 #include <boost/circular_buffer.hpp>
-#include <geometry_msgs/PointStamped.h>
+#include <geometry_msgs/PoseStamped.h>
 #include <rviz/message_filter_display.h>
 
 namespace Ogre
@@ -13,7 +13,6 @@ class SceneNode;
 namespace rviz
 {
 class ColorProperty;
-class FloatProperty;
 class IntProperty;
 }
 
@@ -22,7 +21,7 @@ namespace mtracker_gui
 
 class PoseVisual;
 
-class PathDisplay: public rviz::MessageFilterDisplay<geometry_msgs::PointStamped>
+class PathDisplay: public rviz::MessageFilterDisplay<geometry_msgs::PoseStamped>
 {
 Q_OBJECT
 public:
@@ -35,16 +34,15 @@ protected:
   virtual void reset();
 
 private Q_SLOTS:
-  void updateColorAndAlpha();
+  void updateColor();
   void updateHistoryLength();
 
 private:
-  void processMessage( const geometry_msgs::PointStamped::ConstPtr& msg );
+  void processMessage(const geometry_msgs::PoseStamped::ConstPtr& msg);
 
-  boost::circular_buffer<boost::shared_ptr<PoseVisual> > visuals_;
+  boost::circular_buffer< boost::shared_ptr<PoseVisual> > visuals_;
 
   rviz::ColorProperty* color_property_;
-  rviz::FloatProperty* alpha_property_;
   rviz::IntProperty* history_length_property_;
 };
 
