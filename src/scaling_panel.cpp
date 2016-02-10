@@ -5,7 +5,7 @@ namespace mtracker_gui
 
 ScalingPanel::ScalingPanel(QWidget* parent) : rviz::Panel(parent), nh_(""), max_wheel_rate_(10.0) {
   max_wheel_rate_cli_ = nh_.serviceClient<mtracker::MaxWheelRate>("max_wheel_rate_srv");
-  trigger_cli_ = nh_.serviceClient<mtracker::Trigger>("scaling_trigger_srv");
+  trigger_cli_ = nh_.serviceClient<mtracker::Trigger>("controls_scaling_trigger_srv");
 
   scaling_checkbox_ = new QCheckBox("Scaling active");
   scaling_checkbox_->setChecked(true);
