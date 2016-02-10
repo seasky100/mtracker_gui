@@ -8,6 +8,14 @@
     </description>
   </class>
 
+  <class name="Scaling Panel"
+         type="mtracker_gui::ScalingPanel"
+         base_class_type="rviz::Panel">
+    <description>
+      Panel used for activating and changing the value of maximal wheel rate.
+    </description>
+  </class>
+
   <class name="Debug Panel"
          type="mtracker_gui::DebugPanel"
          base_class_type="rviz::Panel">

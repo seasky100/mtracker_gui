@@ -19,17 +19,19 @@ catkin_package(
 
 qt4_wrap_cpp(MOC_FILES
   include/controls_panel.h
+  include/scaling_panel.h
   include/debug_panel.h
   include/path_display.h
-#  include/pose_visual.h
 )
 
 set(SOURCE_FILES
   src/controls_panel.cpp
+  src/scaling_panel.cpp
   src/debug_panel.cpp
   src/path_display.cpp
   src/pose_visual.cpp
   include/controls_panel.h
+  include/scaling_panel.h
   include/debug_panel.h
   include/path_display.h
   include/pose_visual.h
@@ -44,6 +46,4 @@ add_library(${PROJECT_NAME} ${SOURCE_FILES})
 add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES} ${catkin_LIBRARIES})
 
-install(PROGRAMS scripts/send_test_msgs.py
-  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
-  
+install(PROGRAMS scripts/send_test_msgs.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
