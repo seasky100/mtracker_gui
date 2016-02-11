@@ -1,19 +1,21 @@
-#include "scaling_panel.h"
+#include "controls_scaling_panel.h"
 
 namespace mtracker_gui
 {
 
-ScalingPanel::ScalingPanel(QWidget* parent) : rviz::Panel(parent), nh_(""), max_wheel_rate_(10.0) {
+ControlsScalingPanel::ControlsScalingPanel(QWidget* parent) : rviz::Panel(parent), nh_(""), max_wheel_rate_(10.0) {
   max_wheel_rate_cli_ = nh_.serviceClient<mtracker::MaxWheelRate>("max_wheel_rate_srv");
   trigger_cli_ = nh_.serviceClient<mtracker::Trigger>("controls_scaling_trigger_srv");
 
-  scaling_checkbox_ = new QCheckBox("Scaling active");
-  scaling_checkbox_->setChecked(true);
+  activate_checkbox_ = new QCheckBox("On/Off");
+  activate_checkbox_->setChecked(false);
 
   set_button_ = new QPushButton("Set");
+  set_button_->setDisabled(true);
 
   max_wheel_rate_input_ = new QLineEdit("10.0");
   max_wheel_rate_input_->setAlignment(Qt::AlignRight);
+  max_wheel_rate_input_->setDisabled(true);
 
   QHBoxLayout* h_layout = new QHBoxLayout;
   h_layout->addWidget(new QLabel("Max wheel rate:"));
@@ -22,16 +24,16 @@ ScalingPanel::ScalingPanel(QWidget* parent) : rviz::Panel(parent), nh_(""), max_
   h_layout->addWidget(set_button_);
 
   QVBoxLayout* layout = new QVBoxLayout;
-  layout->addWidget(scaling_checkbox_);
+  layout->addWidget(activate_checkbox_);
   layout->addLayout(h_layout);
   setLayout(layout);
 
   connect(max_wheel_rate_input_, SIGNAL(editingFinished()), this, SLOT(setMaxWheelRate()));
   connect(set_button_, SIGNAL(clicked()), this, SLOT(callMaxWheelRate()));
-  connect(scaling_checkbox_, SIGNAL(clicked(bool)), this, SLOT(callTrigger(bool)));
+  connect(activate_checkbox_, SIGNAL(clicked(bool)), this, SLOT(callTrigger(bool)));
 }
 
-void ScalingPanel::setMaxWheelRate() {
+void ControlsScalingPanel::setMaxWheelRate() {
   try {
     max_wheel_rate_ = boost::lexical_cast<double>(max_wheel_rate_input_->text().toStdString());
   }
@@ -41,15 +43,15 @@ void ScalingPanel::setMaxWheelRate() {
   }
 }
 
-void ScalingPanel::callMaxWheelRate() {
+void ControlsScalingPanel::callMaxWheelRate() {
   mtracker::MaxWheelRate msg;
-  msg.request.value = max_wheel_rate_;
+  msg.request.max_wheel_rate = max_wheel_rate_;
   max_wheel_rate_cli_.call(msg);
 }
 
-void ScalingPanel::callTrigger(bool checked) {
+void ControlsScalingPanel::callTrigger(bool checked) {
   mtracker::Trigger trigger;
-  trigger.request.value = checked;
+  trigger.request.activate = checked;
 
   if (trigger_cli_.call(trigger)) {
     if (checked) {
@@ -61,17 +63,20 @@ void ScalingPanel::callTrigger(bool checked) {
       max_wheel_rate_input_->setEnabled(false);
     }
   }
+  else {
+    activate_checkbox_->setChecked(!checked);
+  }
 }
 
-void ScalingPanel::save(rviz::Config config) const {
+void ControlsScalingPanel::save(rviz::Config config) const {
   rviz::Panel::save(config);
 }
 
-void ScalingPanel::load(const rviz::Config& config) {
+void ControlsScalingPanel::load(const rviz::Config& config) {
   rviz::Panel::load(config);
 }
 
 } // end namespace mtracker_gui
 
 #include <pluginlib/class_list_macros.h>
-PLUGINLIB_EXPORT_CLASS(mtracker_gui::ScalingPanel, rviz::Panel)
+PLUGINLIB_EXPORT_CLASS(mtracker_gui::ControlsScalingPanel, rviz::Panel)

@@ -1,29 +1,29 @@
 <library path="lib/libmtracker_gui">
   
-  <class name="Control Panel"
-         type="mtracker_gui::ControlsPanel"
+  <class name="Manual Controller"
+         type="mtracker_gui::ManualControllerPanel"
          base_class_type="rviz::Panel">
     <description>
-      Panel used for choosing a controller type and setting its parameters.
+      Panel used for changing the manual controller gains and activating keyboard/joystick inputs.
     </description>
   </class>
 
-  <class name="Scaling Panel"
-         type="mtracker_gui::ScalingPanel"
+  <class name="Controls Scaling"
+         type="mtracker_gui::ControlsScalingPanel"
          base_class_type="rviz::Panel">
     <description>
       Panel used for activating and changing the value of maximal wheel rate.
     </description>
   </class>
-
-  <class name="Debug Panel"
+<!--
+  <class name="Debug"
          type="mtracker_gui::DebugPanel"
          base_class_type="rviz::Panel">
     <description>
       Panel used for testing wheels, LEDs, and connection with the MTracker robot.
     </description>
   </class>
-
+-->
   <class name="Path Display"
          type="mtracker_gui::PathDisplay"
          base_class_type="rviz::Display">

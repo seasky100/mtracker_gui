@@ -18,20 +18,20 @@ catkin_package(
     DEPENDS systemlib QtCore QtGui)
 
 qt4_wrap_cpp(MOC_FILES
-  include/controls_panel.h
-  include/scaling_panel.h
+  include/manual_controller_panel.h
+  include/controls_scaling_panel.h
   include/debug_panel.h
   include/path_display.h
 )
 
 set(SOURCE_FILES
-  src/controls_panel.cpp
-  src/scaling_panel.cpp
+  src/manual_controller_panel.cpp
+  src/controls_scaling_panel.cpp
   src/debug_panel.cpp
   src/path_display.cpp
   src/pose_visual.cpp
-  include/controls_panel.h
-  include/scaling_panel.h
+  include/manual_controller_panel.h
+  include/controls_scaling_panel.h
   include/debug_panel.h
   include/path_display.h
   include/pose_visual.h

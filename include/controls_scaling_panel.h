@@ -23,11 +23,11 @@ class QPushButton;
 namespace mtracker_gui
 {
 
-class ScalingPanel : public rviz::Panel
+class ControlsScalingPanel : public rviz::Panel
 {
 Q_OBJECT
 public:
-  ScalingPanel(QWidget* parent = 0);
+  ControlsScalingPanel(QWidget* parent = 0);
 
   virtual void load(const rviz::Config& config);
   virtual void save(rviz::Config config) const;
@@ -38,7 +38,7 @@ private Q_SLOTS:
   void callTrigger(bool checked);
 
 private:
-  QCheckBox* scaling_checkbox_;
+  QCheckBox* activate_checkbox_;
   QPushButton* set_button_;
   QLineEdit* max_wheel_rate_input_;
 
