@@ -1,5 +1,5 @@
-#ifndef CONTROLS_PANEL_H
-#define CONTROLS_PANEL_H
+#ifndef CONTROLS_SCALING_PANEL_H
+#define CONTROLS_SCALING_PANEL_H
 
 #include <stdio.h>
 #include <boost/lexical_cast.hpp>
@@ -51,4 +51,4 @@ private:
 
 } // end namespace mtracker_gui
 
-#endif // CONTROLS_PANEL_H
+#endif // CONTROLS_SCALING_PANEL_H

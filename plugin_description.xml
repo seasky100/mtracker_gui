@@ -8,6 +8,14 @@
     </description>
   </class>
 
+  <class name="Automatic Controller"
+         type="mtracker_gui::AutomaticControllerPanel"
+         base_class_type="rviz::Panel">
+    <description>
+      Panel used for changing the automatic controller gains.
+    </description>
+  </class>
+
   <class name="Controls Scaling"
          type="mtracker_gui::ControlsScalingPanel"
          base_class_type="rviz::Panel">
