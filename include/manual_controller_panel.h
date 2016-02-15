@@ -16,9 +16,6 @@
 
 #include <stdio.h>
 
-class QLineEdit;
-class QPushButton;
-
 namespace mtracker_gui
 {
 

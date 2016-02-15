@@ -1,5 +1,7 @@
 <library path="lib/libmtracker_gui">
-  
+
+  <!-- Panels -->
+
   <class name="Manual Controller"
          type="mtracker_gui::ManualControllerPanel"
          base_class_type="rviz::Panel">
@@ -23,15 +25,25 @@
       Panel used for activating and changing the value of maximal wheel rate.
     </description>
   </class>
-<!--
-  <class name="Debug"
-         type="mtracker_gui::DebugPanel"
+  
+  <class name="Reference Generator"
+         type="mtracker_gui::ReferenceGeneratorPanel"
          base_class_type="rviz::Panel">
     <description>
-      Panel used for testing wheels, LEDs, and connection with the MTracker robot.
+      Panel used for activating reference trajectory generation.
     </description>
   </class>
--->
+  
+   <class name="Simulator"
+         type="mtracker_gui::Simulator"
+         base_class_type="rviz::Panel">
+    <description>
+      Panel used for activating simulator.
+    </description>
+  </class>
+  
+  <!-- Displays -->
+  
   <class name="Path Display"
          type="mtracker_gui::PathDisplay"
          base_class_type="rviz::Display">
