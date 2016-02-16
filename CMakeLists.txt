@@ -3,7 +3,8 @@ project(mtracker_gui)
 
 set(CMAKE_CXX_FLAGS "-std=c++0x -fpermissive ${CMAKE_CXX_FLAGS} -Wfatal-errors\ ")
 
-find_package(catkin REQUIRED COMPONENTS rviz mtracker)
+find_package(catkin REQUIRED COMPONENTS rviz)
+find_package(mtracker REQUIRED)
 find_package(Boost 1.46.1 REQUIRED)
 find_package(Qt4 COMPONENTS QtCore QtGui REQUIRED)
 
@@ -43,9 +44,9 @@ set(SOURCE_FILES
   include/pose_visual.h
 )
 
-include_directories(include /usr/include/OGRE ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
+include_directories(include /usr/include/OGRE ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${mtracker_INCLUDE_DIRS})
 
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 add_library(${PROJECT_NAME} ${SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES} ${catkin_LIBRARY_DIRS})
+target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES} ${catkin_LIBRARIES})
 add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
