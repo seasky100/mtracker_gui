@@ -36,6 +36,9 @@
 #ifndef MANUAL_CONTROLLER_PANEL_H
 #define MANUAL_CONTROLLER_PANEL_H
 
+#include <stdio.h>
+#include <boost/lexical_cast.hpp>
+
 #include <ros/ros.h>
 #include <rviz/panel.h>
 #include <mtracker/Trigger.h>
@@ -48,8 +51,6 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <QLabel>
-
-#include <stdio.h>
 
 namespace mtracker_gui
 {
@@ -64,11 +65,8 @@ public:
   virtual void save(rviz::Config config) const;
 
 private Q_SLOTS:
-  void setGainV();
-  void setGainW();
-  void callManualGains();
-  void callTrigger(bool checked);
-  void callService();
+  void updateGains();
+  void trigger(bool checked);
 
 private:
   void keyPressEvent(QKeyEvent * e);
@@ -82,20 +80,14 @@ private:
   QPushButton* down_button_;
   QPushButton* joy_button_;
   QPushButton* keys_button_;
+  QPushButton* set_button_;
 
-  QLineEdit* v_gain_input_;
-  QLineEdit* w_gain_input_;
+  QLineEdit* k_v_input_;
+  QLineEdit* k_w_input_;
 
   ros::NodeHandle nh_;
-  ros::Publisher velocity_publisher_;
   ros::ServiceClient trigger_cli_;
   ros::ServiceClient manual_gains_cli_;
-
-  double v_gain_;
-  double w_gain_;
-
-  bool keys_active_;
-  bool joy_active_;
 };
 
 } // end namespace mtracker_gui

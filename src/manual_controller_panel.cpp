@@ -38,9 +38,7 @@
 namespace mtracker_gui
 {
 
-ManualControllerPanel::ManualControllerPanel(QWidget* parent) : rviz::Panel(parent), nh_(""), v_gain_(0.4), w_gain_(1.5),
-    keys_active_(false), joy_active_(false)
-{
+ManualControllerPanel::ManualControllerPanel(QWidget* parent) : rviz::Panel(parent), nh_("") {
   trigger_cli_ = nh_.serviceClient<mtracker::Trigger>("manual_controller_trigger_srv");
   manual_gains_cli_ = nh_.serviceClient<mtracker::ManualGains>("manual_gains_srv");
 
@@ -49,6 +47,7 @@ ManualControllerPanel::ManualControllerPanel(QWidget* parent) : rviz::Panel(pare
 
   joy_button_   = new QPushButton("Joy");
   keys_button_  = new QPushButton("Keys");
+  set_button_   = new QPushButton("Set");
   left_button_  = new QPushButton("A");
   right_button_ = new QPushButton("D");
   up_button_    = new QPushButton("W");
@@ -63,6 +62,8 @@ ManualControllerPanel::ManualControllerPanel(QWidget* parent) : rviz::Panel(pare
   keys_button_->setMinimumSize(60, 60);
   keys_button_->setMaximumSize(60, 60);
   keys_button_->setEnabled(false);
+
+  set_button_->setEnabled(false);
 
   up_button_->setMinimumSize(50, 50);
   up_button_->setMaximumSize(50, 50);
@@ -80,11 +81,11 @@ ManualControllerPanel::ManualControllerPanel(QWidget* parent) : rviz::Panel(pare
   right_button_->setMaximumSize(50, 50);
   right_button_->setEnabled(false);
 
-  v_gain_input_ = new QLineEdit("0.4");
-  v_gain_input_->setEnabled(false);
+  k_v_input_ = new QLineEdit("0.4");
+  k_v_input_->setEnabled(false);
 
-  w_gain_input_ = new QLineEdit("1.5");
-  w_gain_input_->setEnabled(false);
+  k_w_input_ = new QLineEdit("1.5");
+  k_w_input_->setEnabled(false);
 
   QSpacerItem* margin = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Fixed);
 
@@ -99,85 +100,68 @@ ManualControllerPanel::ManualControllerPanel(QWidget* parent) : rviz::Panel(pare
   buttons_layout->addItem(margin, 0, 4, 3, 1);
 
   QHBoxLayout* gains_layout = new QHBoxLayout;
-  gains_layout->addWidget(new QLabel("V:"));
-  gains_layout->addWidget(v_gain_input_);
+  gains_layout->addWidget(new QLabel("k_v:"));
+  gains_layout->addWidget(k_v_input_);
   gains_layout->addWidget(new QLabel("m/s"));
   gains_layout->addItem(new QSpacerItem(10, 1));
-  gains_layout->addWidget(new QLabel("W:"));
-  gains_layout->addWidget(w_gain_input_);
+  gains_layout->addWidget(new QLabel("k_w:"));
+  gains_layout->addWidget(k_w_input_);
   gains_layout->addWidget(new QLabel("rad/s"));
 
   QVBoxLayout* layout = new QVBoxLayout;
   layout->addWidget(activate_checkbox_);
   layout->addLayout(buttons_layout);
   layout->addLayout(gains_layout);
+  layout->addWidget(set_button_);
   setLayout(layout);
 
-  connect(v_gain_input_, SIGNAL(editingFinished()), this, SLOT(setGainV()));
-  connect(w_gain_input_, SIGNAL(editingFinished()), this, SLOT(setGainW()));
-  connect(activate_checkbox_, SIGNAL(clicked(bool)), this, SLOT(callTrigger(bool)));
-  //connect(down_button_, SIGNAL(clicked()), this, SLOT(callService()));
+  connect(activate_checkbox_, SIGNAL(clicked(bool)), this, SLOT(trigger(bool)));
+  connect(set_button_, SIGNAL(clicked()), this, SLOT(updateGains()));
 }
 
-void ManualControllerPanel::setGainV() {
-  try {
-    v_gain_ = boost::lexical_cast<double>(v_gain_input_->text().toStdString());
-  }
-  catch(boost::bad_lexical_cast &) {
-    v_gain_ = 0.0;
-    v_gain_input_->setText("0.0");
-  }
-}
-
-void ManualControllerPanel::setGainW() {
-  try {
-    w_gain_ = boost::lexical_cast<double>(w_gain_input_->text().toStdString());
-  }
-  catch(boost::bad_lexical_cast &) {
-    w_gain_ = 0.0;
-    w_gain_input_->setText("0.0");
-  }
-}
-
-void ManualControllerPanel::callManualGains() {
-  mtracker::ManualGains msg;
-  msg.request.k_v = v_gain_;
-  msg.request.k_w = w_gain_;
-
-  manual_gains_cli_.call(msg);
-}
-
-void ManualControllerPanel::callTrigger(bool checked) {
+void ManualControllerPanel::trigger(bool checked) {
   mtracker::Trigger trigger;
   trigger.request.activate = checked;
 
   if (trigger_cli_.call(trigger)) {
     if (checked) {
       joy_button_->setEnabled(true);
-      keys_button_->setCheckable(true);
       keys_button_->setEnabled(true);
+      set_button_->setEnabled(true);
       up_button_->setEnabled(true);
       down_button_->setEnabled(true);
       left_button_->setEnabled(true);
       right_button_->setEnabled(true);
-      v_gain_input_->setEnabled(true);
-      w_gain_input_->setEnabled(true);
+      k_v_input_->setEnabled(true);
+      k_w_input_->setEnabled(true);
     }
     else {
       joy_button_->setEnabled(false);
-      keys_button_->setCheckable(true);
       keys_button_->setEnabled(false);
+      set_button_->setEnabled(false);
       up_button_->setEnabled(false);
       down_button_->setEnabled(false);
       left_button_->setEnabled(false);
       right_button_->setEnabled(false);
-      v_gain_input_->setEnabled(false);
-      w_gain_input_->setEnabled(false);
+      k_v_input_->setEnabled(false);
+      k_w_input_->setEnabled(false);
     }
   }
   else {
     activate_checkbox_->setChecked(!checked);
   }
+}
+
+void ManualControllerPanel::updateGains() {
+  mtracker::ManualGains gains;
+
+  try { gains.request.k_v = boost::lexical_cast<double>(k_v_input_->text().toStdString()); }
+  catch(boost::bad_lexical_cast &) { k_v_input_->setText(":-("); return; }
+
+  try { gains.request.k_w = boost::lexical_cast<double>(k_w_input_->text().toStdString()); }
+  catch(boost::bad_lexical_cast &) { k_w_input_->setText(":-("); return; }
+
+  manual_gains_cli_.call(gains);
 }
 
 void ManualControllerPanel::keyPressEvent(QKeyEvent * e) {
