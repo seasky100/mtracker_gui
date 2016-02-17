@@ -3,7 +3,7 @@
 namespace mtracker_gui
 {
 
-AutomaticControllerPanel::AutomaticControllerPanel(QWidget* parent) : rviz::Panel(parent), nh_(""), activate_checkbox_(false) {
+AutomaticControllerPanel::AutomaticControllerPanel(QWidget* parent) : rviz::Panel(parent), nh_("") {
   trigger_cli_ = nh_.serviceClient<mtracker::Trigger>("automatic_controller_trigger_srv");
 
   activate_checkbox_ = new QCheckBox("On/Off");

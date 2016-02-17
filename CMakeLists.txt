@@ -4,7 +4,7 @@ project(mtracker_gui)
 set(CMAKE_CXX_FLAGS "-std=c++0x -fpermissive ${CMAKE_CXX_FLAGS} -Wfatal-errors\ ")
 
 find_package(catkin REQUIRED COMPONENTS rviz)
-find_package(mtracker REQUIRED)
+#find_package(mtracker REQUIRED)
 find_package(Boost 1.46.1 REQUIRED)
 find_package(Qt4 COMPONENTS QtCore QtGui REQUIRED)
 
@@ -20,6 +20,7 @@ catkin_package(
 qt4_wrap_cpp(MOC_FILES
   include/manual_controller_panel.h
   include/automatic_controller_panel.h
+  include/obstacle_controller_panel.h
   include/controls_scaling_panel.h
   include/reference_generator_panel.h
   include/simulator_panel.h
@@ -29,6 +30,7 @@ qt4_wrap_cpp(MOC_FILES
 set(SOURCE_FILES
   src/manual_controller_panel.cpp
   src/automatic_controller_panel.cpp
+  src/obstacle_controller_panel.cpp
   src/controls_scaling_panel.cpp
   src/reference_generator_panel.cpp
   src/simulator_panel.cpp
@@ -37,16 +39,19 @@ set(SOURCE_FILES
 
   include/manual_controller_panel.h
   include/automatic_controller_panel.h
+  include/obstacle_controller_panel.h
   include/controls_scaling_panel.h
   include/reference_generator_panel.h
   include/simulator_panel.h
   include/path_display.h
   include/pose_visual.h
+  ${MOC_FILES}
 )
 
-include_directories(include /usr/include/OGRE ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${mtracker_INCLUDE_DIRS})
+include_directories(include /usr/include/OGRE ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})# ${mtracker_INCLUDE_DIRS})
 
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+
 add_library(${PROJECT_NAME} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES} ${catkin_LIBRARIES})
 add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})

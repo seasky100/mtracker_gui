@@ -3,7 +3,7 @@
 namespace mtracker_gui
 {
 
-ReferenceGeneratorPanel::ReferenceGeneratorPanel(QWidget* parent) : rviz::Panel(parent), nh_(""), activate_checkbox_(false) {
+ReferenceGeneratorPanel::ReferenceGeneratorPanel(QWidget* parent) : rviz::Panel(parent), nh_("") {
   trigger_cli_ = nh_.serviceClient<mtracker::Trigger>("reference_generator_trigger_srv");
   play_pause_cli_ = nh_.serviceClient<mtracker::PlayPause>("reference_play_pause_srv");
 
@@ -17,19 +17,19 @@ ReferenceGeneratorPanel::ReferenceGeneratorPanel(QWidget* parent) : rviz::Panel(
   stop_button_->setMinimumSize(50, 50);
   stop_button_->setMaximumSize(50, 50);
   stop_button_->setEnabled(false);
-  stop_button_->setIcon(QIcon("/home/tysik/workspace/catkin/src/mtracker_gui/resources/stop.png"));
+  stop_button_->setIcon(QIcon("/home/tysik/workspace/catkin_ws/src/mtracker_gui/resources/stop.png"));
   stop_button_->setIconSize(QSize(25, 25));
 
   pause_button_->setMinimumSize(50, 50);
   pause_button_->setMaximumSize(50, 50);
   pause_button_->setEnabled(false);
-  pause_button_->setIcon(QIcon("/home/tysik/workspace/catkin/src/mtracker_gui/resources/pause.png"));
+  pause_button_->setIcon(QIcon("/home/tysik/workspace/catkin_ws/src/mtracker_gui/resources/pause.png"));
   pause_button_->setIconSize(QSize(25, 25));
 
   play_button_->setMinimumSize(50, 50);
   play_button_->setMaximumSize(50, 50);
   play_button_->setEnabled(false);
-  play_button_->setIcon(QIcon("/home/tysik/workspace/catkin/src/mtracker_gui/resources/play.png"));
+  play_button_->setIcon(QIcon("/home/tysik/workspace/catkin_ws/src/mtracker_gui/resources/play.png"));
   play_button_->setIconSize(QSize(25, 25));
 
   QSpacerItem* margin = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Fixed);
