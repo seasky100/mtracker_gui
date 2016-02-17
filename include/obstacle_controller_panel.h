@@ -42,9 +42,14 @@
 #include <ros/ros.h>
 #include <rviz/panel.h>
 #include <mtracker/Trigger.h>
+#include <mtracker/ObstacleControllerParams.h>
 
 #include <QCheckBox>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QLabel>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 
 namespace mtracker_gui
 {
@@ -59,13 +64,21 @@ public:
   virtual void save(rviz::Config config) const;
 
 private Q_SLOTS:
-  void callTrigger(bool checked);
+  void updateParams();
+  void trigger(bool checked);
 
 private:
   QCheckBox* activate_checkbox_;
+  QLineEdit* kappa_edit_;
+  QLineEdit* epsilon_edit_;
+  QLineEdit* k_w_edit_;
+  QLineEdit* b_edit_;
+  QLineEdit* a_edit_;
+  QPushButton* set_button_;
 
   ros::NodeHandle nh_;
   ros::ServiceClient trigger_cli_;
+  ros::ServiceClient update_params_cli_;
 };
 
 } // end namespace mtracker_gui

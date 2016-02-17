@@ -40,27 +40,101 @@ namespace mtracker_gui
 
 ObstacleControllerPanel::ObstacleControllerPanel(QWidget* parent) : rviz::Panel(parent), nh_("") {
   trigger_cli_ = nh_.serviceClient<mtracker::Trigger>("obstacle_controller_trigger_srv");
+  update_params_cli_ = nh_.serviceClient<mtracker::ObstacleControllerParams>("obstacle_controller_params_srv");
 
   activate_checkbox_ = new QCheckBox("On/Off");
   activate_checkbox_->setChecked(false);
 
+  kappa_edit_ = new QLineEdit("3.0");
+  kappa_edit_->setEnabled(false);
+
+  epsilon_edit_ = new QLineEdit("0.0001");
+  epsilon_edit_->setEnabled(false);
+
+  k_w_edit_ = new QLineEdit("0.1");
+  k_w_edit_->setEnabled(false);
+
+  b_edit_ = new QLineEdit("5.0");
+  b_edit_->setEnabled(false);
+
+  a_edit_ = new QLineEdit("1.0");
+  a_edit_->setEnabled(false);
+
+  set_button_ = new QPushButton("Set");
+  set_button_->setEnabled(false);
+
+  QSpacerItem* margin = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+  QHBoxLayout* fields1_layout = new QHBoxLayout;
+  fields1_layout->addItem(margin);
+  fields1_layout->addWidget(new QLabel("a:"));
+  fields1_layout->addWidget(a_edit_);
+  fields1_layout->addWidget(new QLabel("b_:"));
+  fields1_layout->addWidget(b_edit_);
+  fields1_layout->addWidget(new QLabel("k_w:"));
+  fields1_layout->addWidget(k_w_edit_);
+  fields1_layout->addItem(margin);
+
+  QHBoxLayout* fields2_layout = new QHBoxLayout;
+  fields2_layout->addItem(margin);
+  fields2_layout->addWidget(new QLabel("kappa:"));
+  fields2_layout->addWidget(kappa_edit_);
+  fields2_layout->addWidget(new QLabel("epsilon:"));
+  fields2_layout->addWidget(epsilon_edit_);
+  fields2_layout->addItem(margin);
+
   QVBoxLayout* layout = new QVBoxLayout;
   layout->addWidget(activate_checkbox_);
+  layout->addLayout(fields1_layout);
+  layout->addLayout(fields2_layout);
+  layout->addWidget(set_button_);
   setLayout(layout);
 
-  connect(activate_checkbox_, SIGNAL(clicked(bool)), this, SLOT(callTrigger(bool)));
+  connect(activate_checkbox_, SIGNAL(clicked(bool)), this, SLOT(trigger(bool)));
+  connect(set_button_, SIGNAL(clicked()), this, SLOT(updateParams()));
 }
 
-void ObstacleControllerPanel::callTrigger(bool checked) {
+void ObstacleControllerPanel::updateParams() {
+  mtracker::ObstacleControllerParams params;
+
+  try {params.request.kappa = boost::lexical_cast<double>(kappa_edit_->text().toStdString()); }
+  catch(boost::bad_lexical_cast &){ kappa_edit_->setText(":-("); return; }
+
+  try {params.request.epsilon = boost::lexical_cast<double>(epsilon_edit_->text().toStdString()); }
+  catch(boost::bad_lexical_cast &){ epsilon_edit_->setText(":-("); return; }
+
+  try {params.request.k_w = boost::lexical_cast<double>(k_w_edit_->text().toStdString()); }
+  catch(boost::bad_lexical_cast &){ k_w_edit_->setText(":-("); return; }
+
+  try {params.request.a = boost::lexical_cast<double>(a_edit_->text().toStdString()); }
+  catch(boost::bad_lexical_cast &){ a_edit_->setText(":-("); return; }
+
+  try {params.request.b_ = boost::lexical_cast<double>(b_edit_->text().toStdString()); }
+  catch(boost::bad_lexical_cast &){ b_edit_->setText(":-("); return; }
+
+  update_params_cli_.call(params);
+}
+
+void ObstacleControllerPanel::trigger(bool checked) {
   mtracker::Trigger trigger;
   trigger.request.activate = checked;
 
   if (trigger_cli_.call(trigger)) {
     if (checked) {
-      //
+      kappa_edit_->setEnabled(true);
+      epsilon_edit_->setEnabled(true);
+      k_w_edit_->setEnabled(true);
+      a_edit_->setEnabled(true);
+      b_edit_->setEnabled(true);
+      set_button_->setEnabled(true);
     }
     else {
-      //
+      kappa_edit_->setEnabled(false);
+      epsilon_edit_->setEnabled(false);
+      k_w_edit_->setEnabled(false);
+      a_edit_->setEnabled(false);
+      b_edit_->setEnabled(false);
+      set_button_->setEnabled(false);
     }
   }
   else {
