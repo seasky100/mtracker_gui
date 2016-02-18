@@ -8,6 +8,14 @@
     </description>
   </class>
   
+  <class name="MTracker"
+         type="mtracker_gui::MTrackerPanel"
+         base_class_type="rviz::Panel">
+    <description>
+      Panel used for MTracker settings.
+    </description>
+  </class>
+
   <class name="Manual Controller"
          type="mtracker_gui::ManualControllerPanel"
          base_class_type="rviz::Panel">
@@ -40,7 +48,7 @@
     </description>
   </class>
   
-   <class name="Simulator"
+  <class name="Simulator"
          type="mtracker_gui::SimulatorPanel"
          base_class_type="rviz::Panel">
     <description>
@@ -48,6 +56,14 @@
     </description>
   </class>
   
+  <class name="Data Recorder"
+         type="mtracker_gui::DataRecorderPanel"
+         base_class_type="rviz::Panel">
+    <description>
+      Panel used for activating data recording.
+    </description>
+  </class>
+
   <!-- Displays -->
   <class name="Path Display"
          type="mtracker_gui::PathDisplay"
