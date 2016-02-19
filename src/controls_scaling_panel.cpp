@@ -48,7 +48,7 @@ ControlsScalingPanel::ControlsScalingPanel(QWidget* parent) : rviz::Panel(parent
   set_button_ = new QPushButton("Set");
   set_button_->setDisabled(true);
 
-  max_wheel_rate_input_ = new QLineEdit("10.0");
+  max_wheel_rate_input_ = new QLineEdit("15.0");
   max_wheel_rate_input_->setAlignment(Qt::AlignRight);
   max_wheel_rate_input_->setDisabled(true);
 
