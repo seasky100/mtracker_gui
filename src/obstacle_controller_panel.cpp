@@ -40,7 +40,7 @@ namespace mtracker_gui
 
 ObstacleControllerPanel::ObstacleControllerPanel(QWidget* parent) : rviz::Panel(parent), nh_("") {
   trigger_cli_ = nh_.serviceClient<mtracker::Trigger>("obstacle_controller_trigger_srv");
-  update_params_cli_ = nh_.serviceClient<mtracker::ObstacleControllerParams>("obstacle_controller_params_srv");
+  params_cli_ = nh_.serviceClient<mtracker::Params>("obstacle_controller_params_srv");
 
   activate_checkbox_ = new QCheckBox("On/Off");
   activate_checkbox_->setChecked(false);
@@ -95,24 +95,25 @@ ObstacleControllerPanel::ObstacleControllerPanel(QWidget* parent) : rviz::Panel(
 }
 
 void ObstacleControllerPanel::updateParams() {
-  mtracker::ObstacleControllerParams params;
+  mtracker::Params params;
+  params.request.params.resize(5);
 
-  try {params.request.kappa = boost::lexical_cast<double>(kappa_edit_->text().toStdString()); }
+  try {params.request.params[0] = boost::lexical_cast<double>(kappa_edit_->text().toStdString()); }
   catch(boost::bad_lexical_cast &){ kappa_edit_->setText(":-("); return; }
 
-  try {params.request.epsilon = boost::lexical_cast<double>(epsilon_edit_->text().toStdString()); }
+  try {params.request.params[1] = boost::lexical_cast<double>(epsilon_edit_->text().toStdString()); }
   catch(boost::bad_lexical_cast &){ epsilon_edit_->setText(":-("); return; }
 
-  try {params.request.k_w = boost::lexical_cast<double>(k_w_edit_->text().toStdString()); }
+  try {params.request.params[2] = boost::lexical_cast<double>(k_w_edit_->text().toStdString()); }
   catch(boost::bad_lexical_cast &){ k_w_edit_->setText(":-("); return; }
 
-  try {params.request.a = boost::lexical_cast<double>(a_edit_->text().toStdString()); }
-  catch(boost::bad_lexical_cast &){ a_edit_->setText(":-("); return; }
-
-  try {params.request.b_ = boost::lexical_cast<double>(b_edit_->text().toStdString()); }
+  try {params.request.params[3] = boost::lexical_cast<double>(b_edit_->text().toStdString()); }
   catch(boost::bad_lexical_cast &){ b_edit_->setText(":-("); return; }
 
-  update_params_cli_.call(params);
+  try {params.request.params[4] = boost::lexical_cast<double>(a_edit_->text().toStdString()); }
+  catch(boost::bad_lexical_cast &){ a_edit_->setText(":-("); return; }
+
+  params_cli_.call(params);
 }
 
 void ObstacleControllerPanel::trigger(bool checked) {

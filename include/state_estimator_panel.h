@@ -33,8 +33,8 @@
  * Author: Mateusz Przybyla
  */
 
-#ifndef SIMULATOR_PANEL_H
-#define SIMULATOR_PANEL_H
+#ifndef STATE_ESTIMATOR_PANEL_H
+#define STATE_ESTIMATOR_PANEL_H
 
 #include <stdio.h>
 #include <boost/lexical_cast.hpp>
@@ -50,11 +50,11 @@
 namespace mtracker_gui
 {
 
-class SimulatorPanel : public rviz::Panel
+class StateEstimatorPanel : public rviz::Panel
 {
 Q_OBJECT
 public:
-  SimulatorPanel(QWidget* parent = 0);
+  StateEstimatorPanel(QWidget* parent = 0);
 
   virtual void load(const rviz::Config& config);
   virtual void save(rviz::Config config) const;
@@ -72,4 +72,4 @@ private:
 
 } // end namespace mtracker_gui
 
-#endif // SIMULATOR_PANEL_H
+#endif // STATE_ESTIMATOR_PANEL_H

@@ -40,7 +40,7 @@ namespace mtracker_gui
 
 ManualControllerPanel::ManualControllerPanel(QWidget* parent) : rviz::Panel(parent), nh_("") {
   trigger_cli_ = nh_.serviceClient<mtracker::Trigger>("manual_controller_trigger_srv");
-  manual_gains_cli_ = nh_.serviceClient<mtracker::ManualGains>("manual_gains_srv");
+  params_cli_ = nh_.serviceClient<mtracker::Params>("manual_controller_params_srv");
 
   activate_checkbox_ = new QCheckBox("On/Off");
   activate_checkbox_->setChecked(false);
@@ -116,7 +116,7 @@ ManualControllerPanel::ManualControllerPanel(QWidget* parent) : rviz::Panel(pare
   setLayout(layout);
 
   connect(activate_checkbox_, SIGNAL(clicked(bool)), this, SLOT(trigger(bool)));
-  connect(set_button_, SIGNAL(clicked()), this, SLOT(updateGains()));
+  connect(set_button_, SIGNAL(clicked()), this, SLOT(updateParams()));
 }
 
 void ManualControllerPanel::trigger(bool checked) {
@@ -152,16 +152,17 @@ void ManualControllerPanel::trigger(bool checked) {
   }
 }
 
-void ManualControllerPanel::updateGains() {
-  mtracker::ManualGains gains;
+void ManualControllerPanel::updateParams() {
+  mtracker::Params params;
+  params.request.params.resize(2);
 
-  try { gains.request.k_v = boost::lexical_cast<double>(k_v_input_->text().toStdString()); }
+  try { params.request.params[0] = boost::lexical_cast<double>(k_v_input_->text().toStdString()); }
   catch(boost::bad_lexical_cast &) { k_v_input_->setText(":-("); return; }
 
-  try { gains.request.k_w = boost::lexical_cast<double>(k_w_input_->text().toStdString()); }
+  try { params.request.params[1] = boost::lexical_cast<double>(k_w_input_->text().toStdString()); }
   catch(boost::bad_lexical_cast &) { k_w_input_->setText(":-("); return; }
 
-  manual_gains_cli_.call(gains);
+  params_cli_.call(params);
 }
 
 void ManualControllerPanel::keyPressEvent(QKeyEvent * e) {

@@ -38,10 +38,11 @@
 
 #include <stdio.h>
 #include <boost/lexical_cast.hpp>
+
 #include <ros/ros.h>
 #include <rviz/panel.h>
-#include <mtracker/MaxWheelRate.h>
 #include <mtracker/Trigger.h>
+#include <mtracker/Params.h>
 
 #include <QCheckBox>
 #include <QLineEdit>
@@ -65,9 +66,8 @@ public:
   virtual void save(rviz::Config config) const;
 
 private Q_SLOTS:
-  void setMaxWheelRate();
-  void callMaxWheelRate();
-  void callTrigger(bool checked);
+  void trigger(bool checked);
+  void updateParams();
 
 private:
   QCheckBox* activate_checkbox_;
@@ -75,10 +75,8 @@ private:
   QLineEdit* max_wheel_rate_input_;
 
   ros::NodeHandle nh_;
-  ros::ServiceClient max_wheel_rate_cli_;
   ros::ServiceClient trigger_cli_;
-
-  double max_wheel_rate_;
+  ros::ServiceClient params_cli_;
 };
 
 } // end namespace mtracker_gui

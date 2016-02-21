@@ -40,7 +40,7 @@ namespace mtracker_gui
 
 ReferenceGeneratorPanel::ReferenceGeneratorPanel(QWidget* parent) : rviz::Panel(parent), nh_("") {
   trigger_cli_ = nh_.serviceClient<mtracker::Trigger>("reference_generator_trigger_srv");
-  play_pause_cli_ = nh_.serviceClient<mtracker::PlayPause>("reference_play_pause_srv");
+  params_cli_ = nh_.serviceClient<mtracker::Params>("reference_generator_params_srv");
 
   activate_checkbox_ = new QCheckBox("On/Off");
   activate_checkbox_->setChecked(false);
@@ -82,49 +82,13 @@ ReferenceGeneratorPanel::ReferenceGeneratorPanel(QWidget* parent) : rviz::Panel(
   layout->setAlignment(layout, Qt::AlignCenter);
   setLayout(layout);
 
+  connect(activate_checkbox_, SIGNAL(clicked(bool)), this, SLOT(trigger(bool)));
   connect(stop_button_, SIGNAL(clicked()), this, SLOT(stop()));
   connect(pause_button_, SIGNAL(clicked()), this, SLOT(pause()));
   connect(play_button_, SIGNAL(clicked()), this, SLOT(play()));
-  connect(activate_checkbox_, SIGNAL(clicked(bool)), this, SLOT(callTrigger(bool)));
 }
 
-void ReferenceGeneratorPanel::stop() {
-  mtracker::PlayPause msg;
-  msg.request.play = false;
-  msg.request.pause = false;
-
-  if (play_pause_cli_.call(msg)) {
-    stop_button_->setEnabled(false);
-    pause_button_->setEnabled(true);
-    play_button_->setEnabled(true);
-  }
-}
-
-void ReferenceGeneratorPanel::pause() {
-  mtracker::PlayPause msg;
-  msg.request.play = false;
-  msg.request.pause = true;
-
-  if (play_pause_cli_.call(msg)) {
-    stop_button_->setEnabled(true);
-    pause_button_->setEnabled(false);
-    play_button_->setEnabled(true);
-  }
-}
-
-void ReferenceGeneratorPanel::play() {
-  mtracker::PlayPause msg;
-  msg.request.play = true;
-  msg.request.pause = false;
-
-  if (play_pause_cli_.call(msg)) {
-    stop_button_->setEnabled(true);
-    pause_button_->setEnabled(true);
-    play_button_->setEnabled(false);
-  }
-}
-
-void ReferenceGeneratorPanel::callTrigger(bool checked) {
+void ReferenceGeneratorPanel::trigger(bool checked) {
   mtracker::Trigger trigger;
   trigger.request.activate = checked;
 
@@ -142,6 +106,46 @@ void ReferenceGeneratorPanel::callTrigger(bool checked) {
   }
   else {
     activate_checkbox_->setChecked(!checked);
+  }
+}
+
+void ReferenceGeneratorPanel::stop() {
+  mtracker::Params params;
+  params.request.params.resize(2);
+  params.request.params[0] = 0.0; // start = false
+  params.request.params[1] = 0.0; // pause = false
+
+  if (params_cli_.call(params)) {
+    stop_button_->setEnabled(false);
+    pause_button_->setEnabled(true);
+    play_button_->setEnabled(true);
+  }
+}
+
+void ReferenceGeneratorPanel::pause() {
+  mtracker::Params params;
+  params.request.params.resize(2);
+  params.request.params[0] = 0.0;
+  params.request.params[1] = 1.0;
+
+  if (params_cli_.call(params)) {
+    stop_button_->setEnabled(true);
+    pause_button_->setEnabled(false);
+    play_button_->setEnabled(true);
+  }
+}
+
+void ReferenceGeneratorPanel::play() {
+  mtracker::Params params;
+  params.request.params.resize(2);
+  params.request.params[0] = 1.0;
+  params.request.params[1] = 0.0;
+
+
+  if (params_cli_.call(params)) {
+    stop_button_->setEnabled(true);
+    pause_button_->setEnabled(true);
+    play_button_->setEnabled(false);
   }
 }
 

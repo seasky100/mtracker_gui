@@ -40,6 +40,7 @@ namespace mtracker_gui
 
 DataRecorderPanel::DataRecorderPanel(QWidget* parent) : rviz::Panel(parent), nh_("") {
   trigger_cli_ = nh_.serviceClient<mtracker::Trigger>("data_recorder_trigger_srv");
+  params_cli_ = nh_.serviceClient<mtracker::Params>("data_recorder_params_srv");
 
   activate_checkbox_ = new QCheckBox("On/Off");
   activate_checkbox_->setChecked(false);
@@ -48,10 +49,10 @@ DataRecorderPanel::DataRecorderPanel(QWidget* parent) : rviz::Panel(parent), nh_
   layout->addWidget(activate_checkbox_);
   setLayout(layout);
 
-  connect(activate_checkbox_, SIGNAL(clicked(bool)), this, SLOT(callTrigger(bool)));
+  connect(activate_checkbox_, SIGNAL(clicked(bool)), this, SLOT(trigger(bool)));
 }
 
-void DataRecorderPanel::callTrigger(bool checked) {
+void DataRecorderPanel::trigger(bool checked) {
   mtracker::Trigger trigger;
   trigger.request.activate = checked;
 

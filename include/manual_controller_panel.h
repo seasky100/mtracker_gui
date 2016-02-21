@@ -42,7 +42,7 @@
 #include <ros/ros.h>
 #include <rviz/panel.h>
 #include <mtracker/Trigger.h>
-#include <mtracker/ManualGains.h>
+#include <mtracker/Params.h>
 
 #include <QCheckBox>
 #include <QLineEdit>
@@ -65,8 +65,8 @@ public:
   virtual void save(rviz::Config config) const;
 
 private Q_SLOTS:
-  void updateGains();
   void trigger(bool checked);
+  void updateParams();
 
 private:
   void keyPressEvent(QKeyEvent * e);
@@ -87,7 +87,7 @@ private:
 
   ros::NodeHandle nh_;
   ros::ServiceClient trigger_cli_;
-  ros::ServiceClient manual_gains_cli_;
+  ros::ServiceClient params_cli_;
 };
 
 } // end namespace mtracker_gui

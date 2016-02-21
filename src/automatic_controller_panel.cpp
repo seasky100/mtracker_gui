@@ -40,6 +40,7 @@ namespace mtracker_gui
 
 AutomaticControllerPanel::AutomaticControllerPanel(QWidget* parent) : rviz::Panel(parent), nh_("") {
   trigger_cli_ = nh_.serviceClient<mtracker::Trigger>("automatic_controller_trigger_srv");
+  params_cli_ = nh_.serviceClient<mtracker::Params>("automatic_controller_params_srv");
 
   activate_checkbox_ = new QCheckBox("On/Off");
   activate_checkbox_->setChecked(false);
@@ -48,10 +49,10 @@ AutomaticControllerPanel::AutomaticControllerPanel(QWidget* parent) : rviz::Pane
   layout->addWidget(activate_checkbox_);
   setLayout(layout);
 
-  connect(activate_checkbox_, SIGNAL(clicked(bool)), this, SLOT(callTrigger(bool)));
+  connect(activate_checkbox_, SIGNAL(clicked(bool)), this, SLOT(trigger(bool)));
 }
 
-void AutomaticControllerPanel::callTrigger(bool checked) {
+void AutomaticControllerPanel::trigger(bool checked) {
   mtracker::Trigger trigger;
   trigger.request.activate = checked;
 

@@ -42,7 +42,7 @@
 #include <ros/ros.h>
 #include <rviz/panel.h>
 #include <mtracker/Trigger.h>
-#include <mtracker/PlayPause.h>
+#include <mtracker/Params.h>
 
 #include <QCheckBox>
 #include <QVBoxLayout>
@@ -65,7 +65,7 @@ private Q_SLOTS:
   void stop();
   void pause();
   void play();
-  void callTrigger(bool checked);
+  void trigger(bool checked);
 
 private:
   QCheckBox* activate_checkbox_;
@@ -76,7 +76,7 @@ private:
 
   ros::NodeHandle nh_;
   ros::ServiceClient trigger_cli_;
-  ros::ServiceClient play_pause_cli_;
+  ros::ServiceClient params_cli_;
 };
 
 } // end namespace mtracker_gui

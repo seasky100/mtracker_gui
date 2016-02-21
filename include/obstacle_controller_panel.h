@@ -42,7 +42,7 @@
 #include <ros/ros.h>
 #include <rviz/panel.h>
 #include <mtracker/Trigger.h>
-#include <mtracker/ObstacleControllerParams.h>
+#include <mtracker/Params.h>
 
 #include <QCheckBox>
 #include <QLineEdit>
@@ -78,7 +78,7 @@ private:
 
   ros::NodeHandle nh_;
   ros::ServiceClient trigger_cli_;
-  ros::ServiceClient update_params_cli_;
+  ros::ServiceClient params_cli_;
 };
 
 } // end namespace mtracker_gui

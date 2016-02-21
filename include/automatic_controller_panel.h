@@ -42,6 +42,7 @@
 #include <ros/ros.h>
 #include <rviz/panel.h>
 #include <mtracker/Trigger.h>
+#include <mtracker/Params.h>
 
 #include <QCheckBox>
 #include <QVBoxLayout>
@@ -59,13 +60,14 @@ public:
   virtual void save(rviz::Config config) const;
 
 private Q_SLOTS:
-  void callTrigger(bool checked);
+  void trigger(bool checked);
 
 private:
   QCheckBox* activate_checkbox_;
 
   ros::NodeHandle nh_;
   ros::ServiceClient trigger_cli_;
+  ros::ServiceClient params_cli_;
 };
 
 } // end namespace mtracker_gui

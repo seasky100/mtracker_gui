@@ -55,6 +55,14 @@
       Panel used for activating simulator.
     </description>
   </class>
+
+  <class name="State Estimator"
+         type="mtracker_gui::StateEstimatorPanel"
+         base_class_type="rviz::Panel">
+    <description>
+      Panel used for activating state estimator.
+    </description>
+  </class>
   
   <class name="Data Recorder"
          type="mtracker_gui::DataRecorderPanel"

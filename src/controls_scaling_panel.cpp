@@ -38,9 +38,9 @@
 namespace mtracker_gui
 {
 
-ControlsScalingPanel::ControlsScalingPanel(QWidget* parent) : rviz::Panel(parent), nh_(""), max_wheel_rate_(10.0) {
-  max_wheel_rate_cli_ = nh_.serviceClient<mtracker::MaxWheelRate>("max_wheel_rate_srv");
+ControlsScalingPanel::ControlsScalingPanel(QWidget* parent) : rviz::Panel(parent), nh_("") {
   trigger_cli_ = nh_.serviceClient<mtracker::Trigger>("controls_scaling_trigger_srv");
+  params_cli_ = nh_.serviceClient<mtracker::Params>("controls_scaling_params_srv");
 
   activate_checkbox_ = new QCheckBox("On/Off");
   activate_checkbox_->setChecked(false);
@@ -63,28 +63,11 @@ ControlsScalingPanel::ControlsScalingPanel(QWidget* parent) : rviz::Panel(parent
   layout->addLayout(h_layout);
   setLayout(layout);
 
-  connect(max_wheel_rate_input_, SIGNAL(editingFinished()), this, SLOT(setMaxWheelRate()));
-  connect(set_button_, SIGNAL(clicked()), this, SLOT(callMaxWheelRate()));
-  connect(activate_checkbox_, SIGNAL(clicked(bool)), this, SLOT(callTrigger(bool)));
+  connect(activate_checkbox_, SIGNAL(clicked(bool)), this, SLOT(trigger(bool)));
+  connect(set_button_, SIGNAL(clicked()), this, SLOT(updateParams()));
 }
 
-void ControlsScalingPanel::setMaxWheelRate() {
-  try {
-    max_wheel_rate_ = boost::lexical_cast<double>(max_wheel_rate_input_->text().toStdString());
-  }
-  catch(boost::bad_lexical_cast &) {
-    max_wheel_rate_ = 0.0f;
-    max_wheel_rate_input_->setText("0.0");
-  }
-}
-
-void ControlsScalingPanel::callMaxWheelRate() {
-  mtracker::MaxWheelRate msg;
-  msg.request.max_wheel_rate = max_wheel_rate_;
-  max_wheel_rate_cli_.call(msg);
-}
-
-void ControlsScalingPanel::callTrigger(bool checked) {
+void ControlsScalingPanel::trigger(bool checked) {
   mtracker::Trigger trigger;
   trigger.request.activate = checked;
 
@@ -101,6 +84,20 @@ void ControlsScalingPanel::callTrigger(bool checked) {
   else {
     activate_checkbox_->setChecked(!checked);
   }
+}
+
+void ControlsScalingPanel::updateParams() {
+  mtracker::Params params;
+  params.request.params.resize(1);
+
+  try {
+    params.request.params[0] = boost::lexical_cast<double>(max_wheel_rate_input_->text().toStdString());
+  }
+  catch(boost::bad_lexical_cast &) {
+    max_wheel_rate_input_->setText(":-(");
+  }
+
+  params_cli_.call(params);
 }
 
 void ControlsScalingPanel::save(rviz::Config config) const {

@@ -33,43 +33,51 @@
  * Author: Mateusz Przybyla
  */
 
-#ifndef SIMULATOR_PANEL_H
-#define SIMULATOR_PANEL_H
-
-#include <stdio.h>
-#include <boost/lexical_cast.hpp>
-
-#include <ros/ros.h>
-#include <rviz/panel.h>
-#include <mtracker/Trigger.h>
-#include <mtracker/Params.h>
-
-#include <QCheckBox>
-#include <QVBoxLayout>
+#include "state_estimator_panel.h"
 
 namespace mtracker_gui
 {
 
-class SimulatorPanel : public rviz::Panel
-{
-Q_OBJECT
-public:
-  SimulatorPanel(QWidget* parent = 0);
+StateEstimatorPanel::StateEstimatorPanel(QWidget* parent) : rviz::Panel(parent), nh_("") {
+  trigger_cli_ = nh_.serviceClient<mtracker::Trigger>("state_estimator_trigger_srv");
+  params_cli_ = nh_.serviceClient<mtracker::Params>("state_estimator_params_srv");
 
-  virtual void load(const rviz::Config& config);
-  virtual void save(rviz::Config config) const;
+  activate_checkbox_ = new QCheckBox("On/Off");
+  activate_checkbox_->setChecked(false);
 
-private Q_SLOTS:
-  void trigger(bool checked);
+  QVBoxLayout* layout = new QVBoxLayout;
+  layout->addWidget(activate_checkbox_);
+  setLayout(layout);
 
-private:
-  QCheckBox* activate_checkbox_;
+  connect(activate_checkbox_, SIGNAL(clicked(bool)), this, SLOT(trigger(bool)));
+}
 
-  ros::NodeHandle nh_;
-  ros::ServiceClient trigger_cli_;
-  ros::ServiceClient params_cli_;
-};
+void StateEstimatorPanel::trigger(bool checked) {
+  mtracker::Trigger trigger;
+  trigger.request.activate = checked;
+
+  if (trigger_cli_.call(trigger)) {
+    if (checked) {
+      //
+    }
+    else {
+      //
+    }
+  }
+  else {
+    activate_checkbox_->setChecked(!checked);
+  }
+}
+
+void StateEstimatorPanel::save(rviz::Config config) const {
+  rviz::Panel::save(config);
+}
+
+void StateEstimatorPanel::load(const rviz::Config& config) {
+  rviz::Panel::load(config);
+}
 
 } // end namespace mtracker_gui
 
-#endif // SIMULATOR_PANEL_H
+#include <pluginlib/class_list_macros.h>
+PLUGINLIB_EXPORT_CLASS(mtracker_gui::StateEstimatorPanel, rviz::Panel)
