@@ -33,8 +33,7 @@
  * Author: Mateusz Przybyla
  */
 
-#ifndef PATH_DISPLAY_H
-#define PATH_DISPLAY_H
+#pragma once
 
 #include <boost/circular_buffer.hpp>
 #include <geometry_msgs/PoseStamped.h>
@@ -82,5 +81,3 @@ private:
 };
 
 } // namespace mtracker_gui
-
-#endif // PATH_DISPLAY_H

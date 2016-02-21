@@ -33,8 +33,7 @@
  * Author: Mateusz Przybyla
  */
 
-#ifndef MANUAL_CONTROLLER_PANEL_H
-#define MANUAL_CONTROLLER_PANEL_H
+#pragma once
 
 #include <stdio.h>
 #include <boost/lexical_cast.hpp>
@@ -91,5 +90,3 @@ private:
 };
 
 } // end namespace mtracker_gui
-
-#endif

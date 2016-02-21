@@ -33,8 +33,7 @@
  * Author: Mateusz Przybyla
  */
 
-#ifndef STATE_ESTIMATOR_PANEL_H
-#define STATE_ESTIMATOR_PANEL_H
+#pragma once
 
 #include <stdio.h>
 #include <boost/lexical_cast.hpp>
@@ -71,5 +70,3 @@ private:
 };
 
 } // end namespace mtracker_gui
-
-#endif // STATE_ESTIMATOR_PANEL_H

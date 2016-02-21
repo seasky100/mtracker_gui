@@ -67,6 +67,12 @@ ReferenceGeneratorPanel::ReferenceGeneratorPanel(QWidget* parent) : rviz::Panel(
   play_button_->setIcon(QIcon("/home/tysik/workspace/catkin_ws/src/mtracker_gui/resources/play.png"));
   play_button_->setIconSize(QSize(25, 25));
 
+  trajectories_list_ = new QComboBox();
+  trajectories_list_->addItem("Point");
+  trajectories_list_->addItem("Linear");
+  trajectories_list_->addItem("Harmonic");
+  trajectories_list_->addItem("Lemniscate");
+
   QSpacerItem* margin = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Fixed);
 
   QHBoxLayout* buttons_layout = new QHBoxLayout;
@@ -79,6 +85,7 @@ ReferenceGeneratorPanel::ReferenceGeneratorPanel(QWidget* parent) : rviz::Panel(
   QVBoxLayout* layout = new QVBoxLayout;
   layout->addWidget(activate_checkbox_);
   layout->addLayout(buttons_layout);
+  layout->addWidget(trajectories_list_);
   layout->setAlignment(layout, Qt::AlignCenter);
   setLayout(layout);
 

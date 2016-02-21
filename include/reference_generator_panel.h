@@ -33,8 +33,7 @@
  * Author: Mateusz Przybyla
  */
 
-#ifndef REFERENCE_GENERATOR_PANEL_H
-#define REFERENCE_GENERATOR_PANEL_H
+#pragma once
 
 #include <stdio.h>
 #include <boost/lexical_cast.hpp>
@@ -45,9 +44,11 @@
 #include <mtracker/Params.h>
 
 #include <QCheckBox>
+#include <QLineEdit>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QComboBox>
 
 namespace mtracker_gui
 {
@@ -74,11 +75,21 @@ private:
   QPushButton* pause_button_;
   QPushButton* play_button_;
 
+  QLineEdit* x_input_;
+  QLineEdit* y_input_;
+  QLineEdit* phi_input_;
+  QLineEdit* v_input_;
+  QLineEdit* T_input_;
+  QLineEdit* Rx_input_;
+  QLineEdit* Ry_input_;
+  QLineEdit* nx_input_;
+  QLineEdit* ny_input_;
+
+  QComboBox* trajectories_list_;
+
   ros::NodeHandle nh_;
   ros::ServiceClient trigger_cli_;
   ros::ServiceClient params_cli_;
 };
 
 } // end namespace mtracker_gui
-
-#endif // REFERENCE_GENERATOR_PANEL_H

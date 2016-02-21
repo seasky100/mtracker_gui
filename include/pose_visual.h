@@ -33,8 +33,7 @@
  * Author: Mateusz Przybyla
  */
 
-#ifndef POSE_VISUAL_H
-#define POSE_VISUAL_H
+#pragma once
 
 #include <geometry_msgs/Vector3.h>
 #include <geometry_msgs/PoseStamped.h>
@@ -75,5 +74,3 @@ private:
 
 
 } // end namespace mtracker_gui
-
-#endif // POSE_VISUAL_H

@@ -33,8 +33,7 @@
  * Author: Mateusz Przybyla
  */
 
-#ifndef OBSTACLE_CONTROLLER_PANEL_H
-#define OBSTACLE_CONTROLLER_PANEL_H
+#pragma once
 
 #include <stdio.h>
 #include <boost/lexical_cast.hpp>
@@ -82,5 +81,3 @@ private:
 };
 
 } // end namespace mtracker_gui
-
-#endif // OBSTACLE_CONTROLLER_PANEL_H
