@@ -88,12 +88,12 @@ ReferenceGeneratorPanel::ReferenceGeneratorPanel(QWidget* parent) : rviz::Panel(
   x_input_ = new QLineEdit("0.0");
   y_input_ = new QLineEdit("0.0");
   theta_input_ = new QLineEdit("0.0");
-  v_input_ = new QLineEdit("0.0");
-  T_input_ = new QLineEdit("0.0");
-  Rx_input_ = new QLineEdit("0.0");
-  Ry_input_ = new QLineEdit("0.0");
-  nx_input_ = new QLineEdit("0.0");
-  ny_input_ = new QLineEdit("0.0");
+  v_input_ = new QLineEdit("0.1");
+  T_input_ = new QLineEdit("5.0");
+  Rx_input_ = new QLineEdit("1.0");
+  Ry_input_ = new QLineEdit("1.0");
+  nx_input_ = new QLineEdit("1.0");
+  ny_input_ = new QLineEdit("2.0");
 
   x_input_->setEnabled(false);
   y_input_->setEnabled(false);
@@ -171,6 +171,7 @@ void ReferenceGeneratorPanel::trigger(bool checked) {
       pause_button_->setEnabled(true);
       play_button_->setEnabled(true);
       set_button_->setEnabled(true);
+      trajectories_list_->setEnabled(true);
 
       QString traj_type = trajectories_list_->currentText();
       chooseTrajectory(traj_type);
@@ -180,6 +181,7 @@ void ReferenceGeneratorPanel::trigger(bool checked) {
       pause_button_->setEnabled(false);
       play_button_->setEnabled(false);
       set_button_->setEnabled(false);
+      trajectories_list_->setEnabled(false);
 
       x_input_->setEnabled(false);
       y_input_->setEnabled(false);
@@ -200,6 +202,11 @@ void ReferenceGeneratorPanel::trigger(bool checked) {
 void ReferenceGeneratorPanel::updateParams() {
   mtracker::Params params;
   params.request.params.resize(13, 0);
+
+  stop_button_->setEnabled(false);
+  pause_button_->setEnabled(true);
+  play_button_->setEnabled(true);
+
   params.request.params[2] = 1.0;   // Update traj. params
 
   QString traj_type = trajectories_list_->currentText();
@@ -305,7 +312,7 @@ void ReferenceGeneratorPanel::chooseTrajectory(QString traj_type) {
     nx_input_->setEnabled(false);
     ny_input_->setEnabled(false);
   }
-  else if (traj_type == "Harmonic") {
+  else if (traj_type == "Harmonic" || traj_type == "Lemniscate") {
     x_input_->setEnabled(true);
     y_input_->setEnabled(true);
     theta_input_->setEnabled(true);
