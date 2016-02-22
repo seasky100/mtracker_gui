@@ -44,6 +44,7 @@
 #include <mtracker/Params.h>
 
 #include <QCheckBox>
+#include <QLabel>
 #include <QLineEdit>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -65,8 +66,10 @@ public:
 private Q_SLOTS:
   void stop();
   void pause();
-  void play();
+  void start();
+  void chooseTrajectory(QString traj_type);
   void trigger(bool checked);
+  void updateParams();
 
 private:
   QCheckBox* activate_checkbox_;
@@ -74,10 +77,11 @@ private:
   QPushButton* stop_button_;
   QPushButton* pause_button_;
   QPushButton* play_button_;
+  QPushButton* set_button_;
 
   QLineEdit* x_input_;
   QLineEdit* y_input_;
-  QLineEdit* phi_input_;
+  QLineEdit* theta_input_;
   QLineEdit* v_input_;
   QLineEdit* T_input_;
   QLineEdit* Rx_input_;
