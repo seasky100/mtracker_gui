@@ -44,7 +44,11 @@
 #include <mtracker/Params.h>
 
 #include <QCheckBox>
+#include <QLineEdit>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QLabel>
 
 namespace mtracker_gui
 {
@@ -60,9 +64,13 @@ public:
 
 private Q_SLOTS:
   void trigger(bool checked);
+  void updateParams();
 
 private:
   QCheckBox* activate_checkbox_;
+  QPushButton* set_button_;
+  QLineEdit* t_f_input_;
+  QLineEdit* t_o_input_;
 
   ros::NodeHandle nh_;
   ros::ServiceClient trigger_cli_;

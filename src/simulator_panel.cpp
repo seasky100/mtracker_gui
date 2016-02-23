@@ -45,11 +45,31 @@ SimulatorPanel::SimulatorPanel(QWidget* parent) : rviz::Panel(parent), nh_("") {
   activate_checkbox_ = new QCheckBox("On/Off");
   activate_checkbox_->setChecked(false);
 
+  set_button_ = new QPushButton("Set");
+  set_button_->setEnabled(false);
+
+  t_f_input_ = new QLineEdit("0.1");
+  t_f_input_->setEnabled(false);
+
+  t_o_input_ = new QLineEdit("0.0");
+  t_o_input_->setEnabled(false);
+
+  QHBoxLayout* input_layout = new QHBoxLayout;
+  input_layout->addWidget(new QLabel("T<sub>f</sub>:"));
+  input_layout->addWidget(t_f_input_);
+  input_layout->addWidget(new QLabel("s, "));
+  input_layout->addWidget(new QLabel("T<sub>o</sub>:"));
+  input_layout->addWidget(t_o_input_);
+  input_layout->addWidget(new QLabel("s"));
+
   QVBoxLayout* layout = new QVBoxLayout;
   layout->addWidget(activate_checkbox_);
+  layout->addLayout(input_layout);
+  layout->addWidget(set_button_);
   setLayout(layout);
 
   connect(activate_checkbox_, SIGNAL(clicked(bool)), this, SLOT(trigger(bool)));
+  connect(set_button_, SIGNAL(clicked()), this, SLOT(updateParams()));
 }
 
 void SimulatorPanel::trigger(bool checked) {
@@ -58,15 +78,32 @@ void SimulatorPanel::trigger(bool checked) {
 
   if (trigger_cli_.call(trigger)) {
     if (checked) {
-      //
+      t_f_input_->setEnabled(true);
+      t_o_input_->setEnabled(true);
+      set_button_->setEnabled(true);
     }
     else {
-      //
+      t_f_input_->setEnabled(false);
+      t_o_input_->setEnabled(false);
+      set_button_->setEnabled(false);
     }
   }
   else {
     activate_checkbox_->setChecked(!checked);
   }
+}
+
+void SimulatorPanel::updateParams() {
+  mtracker::Params params;
+  params.request.params.resize(2);
+
+  try {params.request.params[0] = boost::lexical_cast<double>(t_f_input_->text().toStdString()); }
+  catch(boost::bad_lexical_cast &){ t_f_input_->setText(":-("); return; }
+
+  try {params.request.params[1] = boost::lexical_cast<double>(t_o_input_->text().toStdString()); }
+  catch(boost::bad_lexical_cast &){ t_o_input_->setText(":-("); return; }
+
+  params_cli_.call(params);
 }
 
 void SimulatorPanel::save(rviz::Config config) const {
