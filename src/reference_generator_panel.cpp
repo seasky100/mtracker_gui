@@ -84,6 +84,7 @@ ReferenceGeneratorPanel::ReferenceGeneratorPanel(QWidget* parent) : rviz::Panel(
   trajectories_list_->addItem("Linear");
   trajectories_list_->addItem("Harmonic");
   trajectories_list_->addItem("Lemniscate");
+  trajectories_list_->setEnabled(false);
 
   x_input_ = new QLineEdit("0.0");
   y_input_ = new QLineEdit("0.0");
@@ -315,8 +316,8 @@ void ReferenceGeneratorPanel::chooseTrajectory(QString traj_type) {
   else if (traj_type == "Harmonic" || traj_type == "Lemniscate") {
     x_input_->setEnabled(true);
     y_input_->setEnabled(true);
-    theta_input_->setEnabled(true);
-    v_input_->setEnabled(true);
+    theta_input_->setEnabled(false);
+    v_input_->setEnabled(false);
     T_input_->setEnabled(true);
     Rx_input_->setEnabled(true);
     Ry_input_->setEnabled(true);
