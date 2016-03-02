@@ -36,10 +36,12 @@
 #pragma once
 
 #include <stdio.h>
+#include <algorithm>
 #include <boost/lexical_cast.hpp>
 
 #include <ros/ros.h>
 #include <rviz/panel.h>
+#include <geometry_msgs/Twist.h>
 #include <mtracker/Trigger.h>
 #include <mtracker/Params.h>
 
@@ -66,9 +68,12 @@ public:
 private Q_SLOTS:
   void trigger(bool checked);
   void updateParams();
+  void switchKeys(bool checked);
 
 private:
+  bool verifyInputs();
   void keyPressEvent(QKeyEvent * e);
+  void keyReleaseEvent(QKeyEvent * e);
 
 private:
   QCheckBox* activate_checkbox_;
@@ -85,8 +90,12 @@ private:
   QLineEdit* k_w_input_;
 
   ros::NodeHandle nh_;
+  ros::Publisher keys_pub_;
   ros::ServiceClient trigger_cli_;
   ros::ServiceClient params_cli_;
+
+  int keys_[4];
+  double k_v_, k_w_;
 };
 
 } // end namespace mtracker_gui
