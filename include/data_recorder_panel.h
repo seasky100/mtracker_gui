@@ -44,7 +44,10 @@
 #include <mtracker/Params.h>
 
 #include <QCheckBox>
+#include <QPushButton>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QGridLayout>
 
 namespace mtracker_gui
 {
@@ -57,12 +60,25 @@ public:
 
   virtual void load(const rviz::Config& config);
   virtual void save(rviz::Config config) const;
+  void enableCheckBoxes(bool enabled);
 
 private Q_SLOTS:
   void trigger(bool checked);
+  void chooseRecordedItems();
+  void start();
+  void stop();
 
 private:
   QCheckBox* activate_checkbox_;
+  QCheckBox* pose_checkbox_;
+  QCheckBox* ref_pose_checkbox_;
+  QCheckBox* controls_checkbox_;
+  QCheckBox* scaled_controls_checkbox_;
+  QCheckBox* obstacles_checkbox_;
+  QCheckBox* potential_checkbox_;
+
+  QPushButton* start_button_;
+  QPushButton* stop_button_;
 
   ros::NodeHandle nh_;
   ros::ServiceClient trigger_cli_;
@@ -70,5 +86,3 @@ private:
 };
 
 } // end namespace mtracker_gui
-
-#pragma once

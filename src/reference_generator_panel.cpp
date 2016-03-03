@@ -265,7 +265,7 @@ void ReferenceGeneratorPanel::stop() {
 
 void ReferenceGeneratorPanel::pause() {
   mtracker::Params params;
-  params.request.params.resize(13, 0);
+  params.request.params.resize(13, 0.0);
   params.request.params[0] = 0.0;
   params.request.params[1] = 1.0;
 
@@ -278,7 +278,7 @@ void ReferenceGeneratorPanel::pause() {
 
 void ReferenceGeneratorPanel::start() {
   mtracker::Params params;
-  params.request.params.resize(13, 0);
+  params.request.params.resize(13, 0.0);
   params.request.params[0] = 1.0;
   params.request.params[1] = 0.0;
 
